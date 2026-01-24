@@ -1,72 +1,84 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+export PATH=/opt/homebrew/bin:$PATH
+source ~/env-vars.sh
 
-# ==========================================
-# 🚀 ZSH CONFIGURATION - MacOS Setup
-# ==========================================
+export ZSH="$HOME/.oh-my-zsh/"
+export LANG=en_US.UTF-8
+export EDITOR="nvim"
 
-# -- Oh My Zsh --------------------------------
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="spaceship"
-
-
+ZSH_THEME="robbyrussell"
 plugins=(
   git
-  fzf
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-  asdf
+  vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh
 
-# -- PATH Configuration ----------------------
-export PATH="$HOME/.bun/bin:$HOME/.deno/bin:$HOME/.local/bin:$HOME/bin:$PATH"
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+if [ "$TMUX" = "" ]; then tmux; fi
 
-# -- Bun --------------------------------------
-export BUN_INSTALL="$HOME/.bun"
-[ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
-
-# -- Deno -------------------------------------
-export DENO_INSTALL="$HOME/.deno"
-[ -s "$DENO_INSTALL/env" ] && source "$DENO_INSTALL/env"
-
-# -- Node Version Manager (NVM) ---------------
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && source "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# -- Terminal Settings -----------------------
-export TERM='screen-256color'
+export PATH=$PATH:/usr/local/bin
 
-# -- Aliases ----------------------------------
-alias please='sudo'
-alias vim='nvim'
-alias l='ls -lah --group-directories-first'
-alias code="nvim"
+function mktouch () {
+  for p in $@; do
+    mkdir -p $(dirname "$p")
+  done
 
-# -- Starship Prompt -------------------------
-if command -v starship &>/dev/null; then
-  eval "$(starship init zsh)"
-fi
+  touch $@
+}
 
-# -- FZF Key Bindings ------------------------
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+function png2webp () {
+  for file in *; do
+      cwebp -q 100 "$file" -o "${file%.png}.webp"
+  done
+}
 
-# -- Load Powerlevel10k config ----------------
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+function clean-swap(){
+  rm -rf ~/.local/state/nvim/swap/**/*.swp
+}
 
-# -- Cargo (Rust) ----------------------------
-[ -s "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+function clean-branches(){
+  git branch | grep -v 'main' | xargs git branch -D
+}
 
-# -- My GPG Key ------------------------------
-export GPG_TTY=$(tty)
+function kill-ports() {
+  for port in "$@"; do
+    lsof -ti:$port | xargs kill -9 2>/dev/null
+  done
+}
 
-# ==========================================
-# ✅ CONFIGURATION TERMINÉE
-# ==========================================
+function commit-sync() {
+  git add .
+  git commit -m "*"
+  git push
+}
+
+function commit-changelog() {
+  prefix=$( [ -n "$1" ] && echo "docs($1):" || echo "docs:" )
+  git commit -m "$prefix updated CHANGELOG.md"
+}
+
+alias vim="nvim"
+alias avante='NVIM_AVANTE_MODE=1 nvim -c "lua vim.defer_fn(function() require(\"avante.api\").zen_mode() end, 100)"'
+
+# pnpm
+export PNPM_HOME="/Users/marcosoliveira/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+#
+
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+
+# bun completions
+[ -s "/Users/marcosoliveira/.bun/_bun" ] && source "/Users/marcosoliveira/.bun/_bun"
+
+# Shopify Hydrogen alias to local projects
+alias h2='$(npm prefix -s)/node_modules/.bin/shopify hydrogen'
+
+# opencode
+export PATH=/Users/marcosoliveira/.opencode/bin:$PATH
