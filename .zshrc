@@ -64,7 +64,7 @@ alias vim="nvim"
 alias avante='NVIM_AVANTE_MODE=1 nvim -c "lua vim.defer_fn(function() require(\"avante.api\").zen_mode() end, 100)"'
 
 # pnpm
-export PNPM_HOME="/Users/marcosoliveira/Library/pnpm"
+export PNPM_HOME="/Users/matheo/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -75,10 +75,4 @@ esac
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 
 # bun completions
-[ -s "/Users/marcosoliveira/.bun/_bun" ] && source "/Users/marcosoliveira/.bun/_bun"
-
-# Shopify Hydrogen alias to local projects
-alias h2='$(npm prefix -s)/node_modules/.bin/shopify hydrogen'
-
-# opencode
-export PATH=/Users/marcosoliveira/.opencode/bin:$PATH
+[ -s "/Users/matheo/.bun/_bun" ] && source "/Users/matheo/.bun/_bun"
