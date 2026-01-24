@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)"
+    ],
+    "deny": [
+      "Bash(rm -rf :*)"
+    ]
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/bin/ai-notify waiting \"$CLAUDE_NOTIFICATION_MESSAGE\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/bin/ai-notify done"
+          }
+        ]
+      }
+    ]
+  },
+  "alwaysThinkingEnabled": false
+}
