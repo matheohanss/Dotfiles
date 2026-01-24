@@ -1,5 +1,5 @@
 export PATH=/opt/homebrew/bin:$PATH
-source ~/env-vars.sh
+source ~/env-vars.sh 2>/dev/null || true
 
 export ZSH="$HOME/.oh-my-zsh/"
 export LANG=en_US.UTF-8
