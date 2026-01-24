@@ -4,6 +4,16 @@
 [init]
   defaultBranch = main
 
+[alias]
+	a = add
+	sts = status -sb
+	logger = git log --graph --abbrev-commit --decorate --date=relative
+	cm = commit -m
+	ca = commit -a
+	aall = add .
+	d = diff
+	fuck = reset --hard
+
 [pull]
 	rebase = true
 [push]
